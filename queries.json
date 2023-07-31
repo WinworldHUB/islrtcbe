@@ -1,6 +1,11 @@
 {
-  "GET_ALL_ENGLISH_CATEGORIES": "select distinct category_en from words",
-  "GET_ALL_HINDI_CATEGORIES": "select distinct category_hi from words",
-  "GET_ENGLISH_CATEGORY_WORDS": "select * from words w where w.category_en=?",
-  "GET_HINDI_CATEGORY_WORDS": "select * from words w where w.category_hi=?"
+  "GET_ALL_WORDS": "select * from words w where w.isDisabled=0",
+  "GET_WORD": "select * from words w where id=? and w.isDisabled=0",
+  "GET_ALL_ENGLISH_CATEGORIES": "select distinct category_english from words where w.isDisabled=0",
+  "GET_ALL_HINDI_CATEGORIES": "select distinct category_hindi from words where w.isDisabled=0",
+  "GET_ENGLISH_CATEGORY_WORDS": "select * from words w where w.category_english=? and w.isDisabled=0",
+  "GET_HINDI_CATEGORY_WORDS": "select * from words w where w.category_hindi=? and w.isDisabled=0",
+  "ADD_WORD": "INSERT INTO words (category_english, category_hindi, word_english, word_hindi, video_url_english, video_url_hindi) VALUES(?, ?, ?, ?, ?, ?)",
+  "EDIT_WORD": "UPDATE words SET category_english=?, category_hindi=?, word_english=?, word_hindi=?, video_url_english=?, video_url_hindi=? where id=?",
+  "DELETE_WORD": "UPDATE words SET isDisabled=1 where id=?"
 }

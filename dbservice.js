@@ -88,6 +88,71 @@ const dbService = {
       }
     });
   },
+
+  getAllWords: (onCallback) => {
+    dbPool.query(queries.GET_ALL_WORDS, [], (err, result) => {
+      if (err) console.log(err);
+      if (result) {
+        console.log(result);
+        if (result) {
+          onCallback({ status: SUCCESS, data: result });
+        } else {
+          onCallback({ status: FAILURE, data: "No words found" });
+        }
+      }
+    });
+  },
+
+  getWord: (word, onCallback) => {
+    dbPool.query(queries.GET_WORD, word, (err, result) => {
+      if (err) console.log(err);
+      console.log(result);
+      if (result.length > 0) {
+        onCallback({ status: SUCCESS, data: result });
+      } else {
+        onCallback({
+          status: FAILURE,
+          data: `Unable to fetch word for id ${word[0]}`,
+        });
+      }
+    });
+  },
+
+  addWord: (word, onCallback) => {
+    dbPool.query(queries.ADD_WORD, word, (err, result) => {
+      if (err) console.log(err);
+      console.log(result);
+      if (result) {
+        onCallback({ status: SUCCESS, data: result.insertId });
+      } else {
+        onCallback({ status: FAILURE, data: "Unable to add the word" });
+      }
+    });
+  },
+
+  editWord: (word, onCallback) => {
+    dbPool.query(queries.EDIT_WORD, word, (err, result) => {
+      if (err) console.log(err);
+      console.log(result);
+      if (result) {
+        onCallback({ status: SUCCESS, data: result.affectedRows });
+      } else {
+        onCallback({ status: FAILURE, data: `Unable to edit ${word}` });
+      }
+    });
+  },
+
+  deleteWord: (word, onCallback) => {
+    dbPool.query(queries.DELETE_WORD, word, (err, result) => {
+      if (err) console.log(err);
+      console.log(result);
+      if (result) {
+        onCallback({ status: SUCCESS, data: result.affectedRows });
+      } else {
+        onCallback({ status: FAILURE, data: `Unable to delete ${word}` });
+      }
+    });
+  },
 };
 
 module.exports = dbService;

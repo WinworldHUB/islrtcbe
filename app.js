@@ -12,12 +12,27 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
-app.use(express.json());
+app.use(express.json({ limit: "4mb" }));
 
 app.use(express.Router({ mergeParams: true }));
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "4mb" }));
+
+const SUCCESS = "success";
+
+app.get("/", (req, res) => {
+  dbService.getAllWords((result) => {
+    res.json(result);
+  });
+});
+
+app.get("/:id", (req, res) => {
+  const existingWord = [req.params.id];
+  dbService.getWord(existingWord, (result) => {
+    res.json(result);
+  });
+});
 
 app.get("/english/categories", (req, res) => {
   dbService.getAllEnglishCategories((result) => {
@@ -41,6 +56,50 @@ app.get("/hindi/categories", (req, res) => {
   dbService.getAllHindiCategories((result) => {
     res.json(result);
   });
+});
+
+app.post("/", (req, res) => {
+  const newWord = [
+    req.body.category_english,
+    req.body.category_hindi,
+    req.body.word_english,
+    req.body.word_hindi,
+    req.body.video_url_english,
+    req.body.video_url_hindi,
+  ];
+  dbService.addWord(newWord, (result) => {
+    res.json(result);
+  });
+});
+
+app.post("/:id", (req, res) => {
+  const existingWord = [
+    req.body.category_english,
+    req.body.category_hindi,
+    req.body.word_english,
+    req.body.word_hindi,
+    req.body.video_url_english,
+    req.body.video_url_hindi,
+    req.params.id,
+  ];
+  dbService.editWord(existingWord, (result) => {
+    res.json(result);
+  });
+});
+
+app.delete("/:id", (req, res) => {
+  const existingWord = [req.params.id];
+  dbService.deleteWord(existingWord, (result) => {
+    res.json(result);
+  });
+});
+
+app.post("/:language/:category", (req, res) => {
+  console.log(req.params.language);
+  console.log(req.params.category);
+  console.log(req.body);
+  //res.writeHead(200, { "Content-Type": "application/json" });
+  res.json({ status: SUCCESS, data: "Received file" });
 });
 
 app.listen(port, () => {
