@@ -34,6 +34,13 @@ app.get("/:id", (req, res) => {
   });
 });
 
+app.get("/video/:url", (req, res) => {
+  const existingWord = { videourl: req.params.url };
+  dbService.getWordFromVideoUrl(existingWord, (result) => {
+    res.json(result);
+  });
+});
+
 app.get("/english/categories", (req, res) => {
   dbService.getAllEnglishCategories((result) => {
     res.json(result);
@@ -92,14 +99,6 @@ app.delete("/:id", (req, res) => {
   dbService.deleteWord(existingWord, (result) => {
     res.json(result);
   });
-});
-
-app.post("/:language/:category", (req, res) => {
-  console.log(req.params.language);
-  console.log(req.params.category);
-  console.log(req.body);
-  //res.writeHead(200, { "Content-Type": "application/json" });
-  res.json({ status: SUCCESS, data: "Received file" });
 });
 
 app.listen(port, () => {

@@ -1,8 +1,9 @@
 {
   "GET_ALL_WORDS": "select * from words w where w.isDisabled=0",
   "GET_WORD": "select * from words w where id=? and w.isDisabled=0",
-  "GET_ALL_ENGLISH_CATEGORIES": "select distinct category_english from words where w.isDisabled=0",
-  "GET_ALL_HINDI_CATEGORIES": "select distinct category_hindi from words where w.isDisabled=0",
+  "GET_WORD_BY_VIDEO_URL": "select * from words w where video_url_english=:videourl OR video_url_hindi=:videourl and w.isDisabled=0",
+  "GET_ALL_ENGLISH_CATEGORIES": "select distinct category_english as title from words w where w.isDisabled=0",
+  "GET_ALL_HINDI_CATEGORIES": "select distinct category_hindi as title from words w where w.isDisabled=0",
   "GET_ENGLISH_CATEGORY_WORDS": "select * from words w where w.category_english=? and w.isDisabled=0",
   "GET_HINDI_CATEGORY_WORDS": "select * from words w where w.category_hindi=? and w.isDisabled=0",
   "ADD_WORD": "INSERT INTO words (category_english, category_hindi, word_english, word_hindi, video_url_english, video_url_hindi) VALUES(?, ?, ?, ?, ?, ?)",

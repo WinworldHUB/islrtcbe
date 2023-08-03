@@ -5,17 +5,18 @@ const SUCCESS = "success";
 const FAILURE = "failure";
 
 const dbPool = mysql.createPool({
+  connectTimeout: 20000,
+  connectionLimit: 10,
   database: "toshanig_islrtcdb",
   host: "204.93.216.11",
-  user: "toshanig_islrtc",
+  idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
+  maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
+  namedPlaceholders: true,
   password: "Password@123d",
   port: 3306,
-  connectTimeout: 20000,
-  waitForConnections: true,
-  connectionLimit: 10,
-  maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
-  idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
   queueLimit: 0,
+  user: "toshanig_islrtc",
+  waitForConnections: true,
 });
 
 const dbService = {
@@ -108,6 +109,21 @@ const dbService = {
       if (err) console.log(err);
       console.log(result);
       if (result.length > 0) {
+        onCallback({ status: SUCCESS, data: result });
+      } else {
+        onCallback({
+          status: FAILURE,
+          data: `Unable to fetch word for id ${word[0]}`,
+        });
+      }
+    });
+  },
+
+  getWordFromVideoUrl: (word, onCallback) => {
+    dbPool.query(queries.GET_WORD_BY_VIDEO_URL, word, (err, result) => {
+      if (err) console.log(err);
+      console.log(result);
+      if (result) {
         onCallback({ status: SUCCESS, data: result });
       } else {
         onCallback({
