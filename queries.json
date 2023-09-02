@@ -1,12 +1,30 @@
 {
+  "GET_ALL_LANGUAGES": "select * from languages l where l.isDisabled=0",
+  "ADD_LANGUAGE": "INSERT INTO languages (title, code) VALUES(:title, :code);",
+  "UPDATE_LANGUAGE": "UPDATE languages SET title=:title, code=:code WHERE id=:id;",
+  "DELETE_LANGUAGE": "UPDATE languages SET isDisabled=1 WHERE id=:id;",
+
   "GET_ALL_WORDS": "select * from words w where w.isDisabled=0",
-  "GET_WORD": "select * from words w where id=? and w.isDisabled=0",
-  "GET_WORD_BY_VIDEO_URL": "select * from words w where video_url_english=:videourl OR video_url_hindi=:videourl and w.isDisabled=0",
-  "GET_ALL_ENGLISH_CATEGORIES": "select distinct category_english as title from words w where w.isDisabled=0",
-  "GET_ALL_HINDI_CATEGORIES": "select distinct category_hindi as title from words w where w.isDisabled=0",
-  "GET_ENGLISH_CATEGORY_WORDS": "select * from words w where w.category_english=? and w.isDisabled=0",
-  "GET_HINDI_CATEGORY_WORDS": "select * from words w where w.category_hindi=? and w.isDisabled=0",
-  "ADD_WORD": "INSERT INTO words (category_english, category_hindi, word_english, word_hindi, video_url_english, video_url_hindi) VALUES(?, ?, ?, ?, ?, ?)",
-  "EDIT_WORD": "UPDATE words SET category_english=?, category_hindi=?, word_english=?, word_hindi=?, video_url_english=?, video_url_hindi=? where id=?",
-  "DELETE_WORD": "UPDATE words SET isDisabled=1 where id=?"
+  "ADD_WORD": "INSERT INTO words (word, videoUrl, languageId) VALUES(:word, :videoUrl, :languageId);",
+  "UPDATE_WORD": "UPDATE words SET word=:word, videoUrl:videoUrl, languageId:languageId WHERE id=:id;",
+  "DELETE_WORD": "UPDATE words SET isDisabled=1 WHERE id=:id;",
+
+  "GET_ALL_WORDS_FOR_LANGUAGE": "select w.*, c.category from words w inner join wordcategoriesmap m on m.wordId = w.id inner join categories c on c.id = m.categoryId where c.languageId=:languageId",
+
+  "GET_ALL_RELATED_WORDS": "select distinct * from words w inner join wordsmap m on m.relatedWordId = w.id and m.wordId=:wordId where w.isDisabled=0",
+  "ADD_RELATED_WORD": "INSERT INTO wordsmap (wordId, relatedWordId) VALUES(:wordId, :relatedWordId);",
+  "UPDATE_RELATED_WORD": "UPDATE wordsmap SET wordId=:newWordId, relatedWordId=:newRelatedWordId WHERE wordId=:wordId and relatedWordId=:relatedWordId;",
+  "DELETE_RELATED_WORD": "DELETE from wordsmap WHERE wordId=:wordId and relatedWordId=:relatedWordId;",
+
+  "GET_ALL_CATEGORIES": "select * from categories c where c.isDisabled=0",
+  "ADD_CATEGORY": "INSERT INTO categories (category, languageId) VALUES(:category, :languageId);",
+  "UPDATE_CATEGORY": "UPDATE categories SET category=:category, languageId=:languageId WHERE id=:id;",
+  "DELETE_CATEGORY": "UPDATE categories SET isDisabled=1 WHERE id=:id;",
+
+  "GET_ALL_WORDS_FOR_CATEGORY": "select w.* from words w inner join wordcategoriesmap m on m.wordId  = w.id inner join categories c on m.categoryId = c.id where c.id=:categoryId",
+  "ADD_CATEGORY_FOR_WORD": "INSERT INTO wordcategoriesmap (wordId, categoryId) VALUES (:wordId, :categoryId);",
+  "UPDATE_CATEGORY_FOR_WORD": "UPDATE wordcategoriesmap SET wordId:newWordId, categoryId:newCategoryId WHERE wordId:wordId and categoryId:categoryId;",
+  "DELETE_CATEGORY_FOR_WORD": "DELETE from wordcategoriesmap WHERE wordId:wordId and categoryId:categoryId;",
+
+  "GET_ALL_CATEGORIES_FOR_LANGUAGE": "select c.* from categories c where c.languageId=:languageId "
 }
